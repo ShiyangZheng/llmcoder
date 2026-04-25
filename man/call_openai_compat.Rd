@@ -10,7 +10,7 @@ call_openai_compat(
   api_key,
   model,
   base_url,
-  extra_hdrs = list()
+  extra_hdrs = character()
 )
 }
 \description{

@@ -121,29 +121,31 @@ call_llm <- function(prompt, system_prompt, context = NULL) {
 #' Generic OpenAI-compatible chat completions call
 #' @keywords internal
 call_openai_compat <- function(prompt, system_prompt, api_key, model,
-                                base_url, extra_hdrs = list()) {
+                                base_url, extra_hdrs = character()) {
 
   hdrs <- c(
-    list(
-      "Authorization" = paste("Bearer", api_key),
-      "Content-Type"  = "application/json"
-    ),
-    extra_hdrs
+    "Authorization" = paste("Bearer", api_key),
+    "Content-Type"  = "application/json",
+    unname(extra_hdrs)
   )
 
-  req <- httr2::request(paste0(trimws(base_url, "right"), "/chat/completions")) |>
-    httr2::req_headers(.headers = hdrs) |>
-    httr2::req_body_json(list(
-      model       = model,
-      messages    = list(
-        list(role = "system", content = system_prompt),
-        list(role = "user",   content = prompt)
-      ),
-      temperature = 0.2,
-      max_tokens  = 2000
-    )) |>
-    httr2::req_error(is_error = \(r) FALSE) |>
-    httr2::req_timeout(120)
+  body_data <- list(
+    model       = model,
+    messages    = list(
+      list(role = "system", content = system_prompt),
+      list(role = "user",   content = prompt)
+    ),
+    temperature = 0.2,
+    max_tokens  = 2000
+  )
+
+  base <- httr2::request(paste0(trimws(base_url, "right"), "/chat/completions"))
+
+  # Build headers using do.call (avoids non-standard-evaluation issues in pipeline)
+  req <- do.call(httr2::req_headers, c(list(.req = base), hdrs))
+  req <- httr2::req_body_json(req, data = body_data)
+  req <- httr2::req_error(req, is_error = \(r) FALSE)
+  req <- httr2::req_timeout(req, 120)
 
   resp <- httr2::req_perform(req)
   body <- httr2::resp_body_json(resp)
@@ -165,7 +167,7 @@ call_anthropic <- function(prompt, system_prompt, api_key, model) {
       "anthropic-version" = "2023-06-01",
       "Content-Type"      = "application/json"
     ) |>
-    httr2::req_body_json(list(
+    httr2::req_body_json(data = list(
       model      = model,
       max_tokens = 2000,
       system     = system_prompt,
