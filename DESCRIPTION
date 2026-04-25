@@ -16,6 +16,7 @@ Description: An RStudio addin that integrates large language model (LLM)
     API key required), and any `OpenAI`-compatible custom endpoint (e.g. `LM
     Studio`, `vLLM`, `llama.cpp`).
 License: MIT + file LICENSE
+Date: 2026-04-25
 Depends: R (>= 4.1.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
