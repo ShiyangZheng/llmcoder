@@ -7,6 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
+![Demo](assets/demo.gif)
+
 **llmcoder** is an RStudio addin that integrates large language model (LLM)
 assistance directly into your coding workflow. Write a `#` comment, press a
 shortcut, and receive working R code below — no browser, no copy-pasting.
