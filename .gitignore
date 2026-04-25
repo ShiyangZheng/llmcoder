@@ -1,0 +1,20 @@
+# Temp/build artifacts
+*.tar.gz
+*.zip
+*.log
+.Rbuildignore
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# R artifacts
+.Rhistory
+.Rapp.history
+*.rds
+*.rda
+
+# OS clutter (accidental parent dirs)
+.R/
+.CFUserTextEncoding

@@ -1,0 +1,10 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "{llmcoder}: LLM-Powered Code Generation and Error Fixing for {RStudio}",
+  author   = person("Shiyang", "Zheng",
+                    email   = "Shiyang.Zheng@nottingham.ac.uk",
+                    comment = c(ORCID = "0000-0003-0511-4683")),
+  year     = "2025",
+  note     = "R package version 1.0.0",
+  url      = "https://github.com/ShiyangZheng/llmcoder"
+)

@@ -1,0 +1,29 @@
+Name: Generate Code from Comment
+Description: Reads the # comment on the current line and generates R code using an LLM. Place cursor on a comment line and trigger. Recommended shortcut: Ctrl+Shift+G (Cmd+Shift+G on macOS).
+Binding: addin_generate_from_comment
+Interactive: false
+
+Name: Generate Code (with Preview)
+Description: Same as 'Generate Code from Comment' but opens an editable preview dialog before inserting code. Recommended shortcut: Ctrl+Shift+P (Cmd+Shift+P on macOS).
+Binding: addin_generate_with_preview
+Interactive: true
+
+Name: Fix Last Console Error
+Description: Reads the most recent R error (tries rlang::last_error() and .Last.error), sends it with the current file to the LLM, and shows a diff-style fix preview. Workflow: run code, get error, trigger this addin, review fix, click Apply. Recommended shortcut: Ctrl+Shift+F (Cmd+Shift+F on macOS).
+Binding: addin_fix_console_error
+Interactive: true
+
+Name: Fix Selected Error Text
+Description: Select any error message text in the editor (paste from console if needed), then trigger this addin to get an LLM fix for the current file.
+Binding: addin_fix_selected_error
+Interactive: true
+
+Name: Explain Selected Code
+Description: Select R code, trigger to insert a plain-English explanation as # comment lines immediately above the selection. Recommended shortcut: Ctrl+Shift+E (Cmd+Shift+E on macOS).
+Binding: addin_explain_code
+Interactive: false
+
+Name: LLMcoder Settings
+Description: Configure provider (OpenAI / Anthropic / DeepSeek / Groq / Together AI / OpenRouter / Ollama / Custom), model, API key, and context-window size. Settings can be persisted to ~/.Rprofile.
+Binding: addin_settings
+Interactive: true

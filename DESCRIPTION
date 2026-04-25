@@ -1,0 +1,35 @@
+Package: llmcoder
+Title: LLM-Powered Code Generation and Error Fixing for RStudio
+Version: 1.0.0
+Authors@R:
+    person(given  = "Shiyang",
+           family = "Zheng",
+           email  = "shiyang.zheng@nottingham.ac.uk",
+           role   = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-0511-4683"))
+Description: An RStudio addin that integrates large language model (LLM)
+    assistance directly into the code-editing workflow. Users can generate R
+    code from inline comments, obtain LLM-assisted fixes for console errors,
+    and insert plain-English explanations of selected code blocks - all
+    without leaving the editor. Supports OpenAI, Anthropic (Claude),
+    DeepSeek, Groq, Together AI, OpenRouter, Ollama (fully local, no API key
+    required), and any OpenAI-compatible custom endpoint (e.g. LM Studio,
+    vLLM, llama.cpp).
+License: MIT + file LICENSE
+Depends: R (>= 4.1.0)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+URL: https://github.com/ShiyangZheng/llmcoder
+BugReports: https://github.com/ShiyangZheng/llmcoder/issues
+Imports:
+    rstudioapi (>= 0.13),
+    httr2 (>= 1.0.0),
+    miniUI (>= 0.1.1),
+    shiny (>= 1.7.0),
+    stringr (>= 1.5.0),
+    rlang (>= 1.0.0)
+Suggests:
+    jsonlite (>= 1.8.0),
+    testthat (>= 3.0.0),
+    withr (>= 2.5.0)
