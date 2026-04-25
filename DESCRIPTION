@@ -11,10 +11,10 @@ Description: An 'RStudio' addin that integrates large language model (LLM)
     assistance directly into the code-editing workflow. Users can generate R
     code from inline comments, obtain LLM-assisted fixes for console errors,
     and insert plain-English explanations of selected code blocks - all
-    without leaving the editor. Supports `OpenAI`, `Anthropic` (Claude),
-    `DeepSeek`, `Groq`, `Together AI`, `OpenRouter`, `Ollama` (fully local, no
-    API key required), and any `OpenAI`-compatible custom endpoint (e.g. `LM
-    Studio`, `vLLM`, `llama.cpp`).
+    without leaving the editor. Supports 'OpenAI', 'Anthropic' (Claude),
+    'DeepSeek', 'Groq', 'Together AI', 'OpenRouter', 'Ollama' (fully local, no
+    API key required), and any 'OpenAI'-compatible custom endpoint (e.g. 'LM
+    Studio', 'vLLM', 'llama.cpp').
 License: MIT + file LICENSE
 Date: 2026-04-25
 Depends: R (>= 4.1.0)
