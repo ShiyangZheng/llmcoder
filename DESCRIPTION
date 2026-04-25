@@ -1,5 +1,5 @@
 Package: llmcoder
-Title: LLM-Powered Code Generation and Error Fixing for RStudio
+Title: LLM-Powered Code Generation and Error Fixing for 'RStudio'
 Version: 1.0.0
 Authors@R:
     person(given  = "Shiyang",
@@ -7,7 +7,7 @@ Authors@R:
            email  = "shiyang.zheng@nottingham.ac.uk",
            role   = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0511-4683"))
-Description: An RStudio addin that integrates large language model (LLM)
+Description: An 'RStudio' addin that integrates large language model (LLM)
     assistance directly into the code-editing workflow. Users can generate R
     code from inline comments, obtain LLM-assisted fixes for console errors,
     and insert plain-English explanations of selected code blocks - all
