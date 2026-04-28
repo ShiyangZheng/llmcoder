@@ -1,10 +1,15 @@
-bibentry(
-  bibtype  = "Manual",
-  title    = "{llmcoder}: LLM-Powered Code Generation and Error Fixing for {RStudio}",
-  author   = person("Shiyang", "Zheng",
-                    email   = "Shiyang.Zheng@nottingham.ac.uk",
-                    comment = c(ORCID = "0000-0003-0511-4683")),
-  year     = "2025",
-  note     = "R package version 1.0.0",
-  url      = "https://github.com/ShiyangZheng/llmcoder"
+citHeader("To cite llmcoder in publications use:")
+
+citEntry(
+  entry  = "Manual",
+  title  = "llmcoder: LLM-Powered Code Generation and Error Fixing for RStudio",
+  author = "Shiyang Zheng",
+  year   = "2026",
+  url    = "https://github.com/ShiyangZheng/llmcoder",
+  note   = "R package version 1.0.0",
+  textVersion = paste(
+    "Zheng, S. (2026). llmcoder: LLM-Powered Code Generation",
+    "and Error Fixing for RStudio. R package version 1.0.0.",
+    "https://github.com/ShiyangZheng/llmcoder"
+  )
 )
