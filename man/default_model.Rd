@@ -16,4 +16,11 @@ Character string with the default model name.
 Returns a sensible default model name when the user has not specified one
 explicitly.
 }
+\examples{
+\dontrun{
+default_model("openai")
+default_model("anthropic")
+default_model("ollama")
+}
+}
 \keyword{internal}

@@ -2,11 +2,41 @@
 % Please edit documentation in R/gadgets.R
 \name{write_rprofile}
 \alias{write_rprofile}
-\title{Write options to ~/.Rprofile, replacing any previous llmcoder block.}
+\title{Write llmcoder options to ~/.Rprofile}
 \usage{
 write_rprofile(provider, model, api_key, ctx_lines, ollama_url, custom_url)
 }
+\arguments{
+\item{provider}{Character.  Provider identifier (see \code{\link[=llmcoder_setup]{llmcoder_setup()}}).}
+
+\item{model}{Character.  Model name.}
+
+\item{api_key}{Character.  API key (may be \code{""} for Ollama).}
+
+\item{ctx_lines}{Integer.    Number of context lines.}
+
+\item{ollama_url}{Character.  Ollama base URL.}
+
+\item{custom_url}{Character.  Custom endpoint base URL.}
+}
+\value{
+Invisible \code{NULL}.  Called for its side-effect of writing to
+\verb{~/.Rprofile}.
+}
 \description{
-Write options to ~/.Rprofile, replacing any previous llmcoder block.
+Writes (or replaces) an \verb{# --- llmcoder ---} block in the user's
+\verb{~/.Rprofile} so that llmcoder settings persist across R sessions.
+}
+\examples{
+\dontrun{
+write_rprofile(
+  provider   = "ollama",
+  model      = "llama3",
+  api_key    = "",
+  ctx_lines  = 40L,
+  ollama_url = "http://localhost:11434",
+  custom_url = ""
+)
+}
 }
 \keyword{internal}

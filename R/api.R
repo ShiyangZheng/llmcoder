@@ -5,7 +5,7 @@
 #' Call the configured LLM
 #'
 #' Unified dispatch function that reads provider, model, and credentials from
-#' options (set via [llmcoder_setup()] or **Addins → LLMcoder Settings**) and
+#' options (set via [llmcoder_setup()] or **Addins \→ LLMcoder Settings**) and
 #' forwards the request to the appropriate backend.
 #'
 #' @param prompt       Character. The user-facing instruction.
@@ -35,6 +35,17 @@
 #'   \item{`"custom"`}{Any OpenAI-compatible server.  Set
 #'     `llmcoder.custom_url` to the base URL (e.g.\
 #'     `"http://localhost:1234/v1"` for LM Studio).}
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' llmcoder_setup("ollama", model = "llama3")
+#' resp <- call_llm(
+#'   prompt        = "Write R code to compute the mean of a numeric vector",
+#'   system_prompt = "You are an R programming assistant.",
+#'   context       = NULL
+#' )
+#' cat(resp)
 #' }
 #'
 #' @keywords internal
@@ -211,6 +222,12 @@ call_ollama <- function(prompt, system_prompt, model, base_url) {
 #'
 #' @param provider Character. Provider identifier (see [call_llm()]).
 #' @return Character string with the default model name.
+#' @examples
+#' \dontrun{
+#' default_model("openai")
+#' default_model("anthropic")
+#' default_model("ollama")
+#' }
 #' @keywords internal
 default_model <- function(provider) {
   switch(provider,
@@ -288,6 +305,16 @@ build_system_prompt <- function() {
 }
 
 #' System prompt for code explanation
+#'
+#' Returns the system prompt instructing the LLM to write R comments
+#' explaining the user's selected code.
+#'
+#' @return Character string: the system prompt sent to the LLM for the
+#'   explain workflow.
+#' @examples
+#' \dontrun{
+#' build_explain_prompt()
+#' }
 #' @keywords internal
 build_explain_prompt <- function() {
   paste0(
@@ -299,6 +326,16 @@ build_explain_prompt <- function() {
 }
 
 #' System prompt for error fixing
+#'
+#' Returns the system prompt instructing the LLM to diagnose an R error and
+#' produce corrected code.
+#'
+#' @return Character string: the system prompt sent to the LLM for the
+#'   fix workflow.
+#' @examples
+#' \dontrun{
+#' build_fix_prompt()
+#' }
 #' @keywords internal
 build_fix_prompt <- function() {
   paste0(

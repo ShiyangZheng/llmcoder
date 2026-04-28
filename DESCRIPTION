@@ -15,6 +15,12 @@ Description: An 'RStudio' addin that integrates large language model (LLM)
     'DeepSeek', 'Groq', 'Together AI', 'OpenRouter', 'Ollama' (fully local, no
     API key required), and any 'OpenAI'-compatible custom endpoint (e.g. 'LM
     Studio', 'vLLM', 'llama.cpp').
+References:
+    Zheng (2026) <https://github.com/ShiyangZheng/llmcoder>
+    Zanatta and others (2024) "A Survey on Large Language Models for Code
+    Generation" <arXiv:2406.00515>
+    RStudio Inc (2024) "RStudio API Reference"
+    <https://docs.posit.co/ide/server-pro/rstudio_ide_command_line.html>
 License: MIT + file LICENSE
 Date: 2026-04-25
 Depends: R (>= 4.1.0)

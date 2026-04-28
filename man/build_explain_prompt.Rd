@@ -6,7 +6,17 @@
 \usage{
 build_explain_prompt()
 }
+\value{
+Character string: the system prompt sent to the LLM for the
+explain workflow.
+}
 \description{
-System prompt for code explanation
+Returns the system prompt instructing the LLM to write R comments
+explaining the user's selected code.
+}
+\examples{
+\dontrun{
+build_explain_prompt()
+}
 }
 \keyword{internal}

@@ -19,7 +19,7 @@ Character string containing the model's response text.
 }
 \description{
 Unified dispatch function that reads provider, model, and credentials from
-options (set via \code{\link[=llmcoder_setup]{llmcoder_setup()}} or \strong{Addins → LLMcoder Settings}) and
+options (set via \code{\link[=llmcoder_setup]{llmcoder_setup()}} or \strong{Addins \→ LLMcoder Settings}) and
 forwards the request to the appropriate backend.
 }
 \details{
@@ -43,5 +43,17 @@ Supported providers:
 \code{llmcoder.custom_url} to the base URL (e.g.\
 \code{"http://localhost:1234/v1"} for LM Studio).}
 }
+}
+\examples{
+\dontrun{
+llmcoder_setup("ollama", model = "llama3")
+resp <- call_llm(
+  prompt        = "Write R code to compute the mean of a numeric vector",
+  system_prompt = "You are an R programming assistant.",
+  context       = NULL
+)
+cat(resp)
+}
+
 }
 \keyword{internal}

@@ -362,7 +362,30 @@ settings_gadget <- function() {
 
 # ---- Helpers -----------------------------------------------------------------
 
-#' Write options to ~/.Rprofile, replacing any previous llmcoder block.
+#' Write llmcoder options to ~/.Rprofile
+#'
+#' Writes (or replaces) an `# --- llmcoder ---` block in the user's
+#' `~/.Rprofile` so that llmcoder settings persist across R sessions.
+#'
+#' @param provider   Character.  Provider identifier (see [llmcoder_setup()]).
+#' @param model      Character.  Model name.
+#' @param api_key    Character.  API key (may be `""` for Ollama).
+#' @param ctx_lines  Integer.    Number of context lines.
+#' @param ollama_url Character.  Ollama base URL.
+#' @param custom_url Character.  Custom endpoint base URL.
+#' @return Invisible `NULL`.  Called for its side-effect of writing to
+#'   `~/.Rprofile`.
+#' @examples
+#' \dontrun{
+#' write_rprofile(
+#'   provider   = "ollama",
+#'   model      = "llama3",
+#'   api_key    = "",
+#'   ctx_lines  = 40L,
+#'   ollama_url = "http://localhost:11434",
+#'   custom_url = ""
+#' )
+#' }
 #' @keywords internal
 write_rprofile <- function(provider, model, api_key, ctx_lines,
                             ollama_url, custom_url) {

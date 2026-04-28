@@ -135,22 +135,22 @@ llmcoder_setup <- function(
 
 #' Show the current LLMcoder configuration
 #'
-#' Prints the active provider, model, API key (masked), context-lines setting,
-#' and any provider-specific URLs to the console.
+#' Returns (and prints) the active provider, model, API key (masked),
+#' context-lines setting, and any provider-specific URLs.
 #'
-#' @return Invisible named list of the current settings (API key is masked for
-#'   security).
+#' @return An object of class `"llmcoder_config"`: a named list with elements
+#'   `provider`, `model`, `api_key`, `context_lines`, `ollama_url`, and
+#'   `custom_url`.  The API key is masked for security.  When printed, it
+#'   displays in a human-readable table.
 #'
 #' @examples
-#' \dontrun{
+#' # Show current configuration (reads from option values)
 #' llmcoder_config()
-#' # llmcoder configuration:
-#' #   Provider      : openai
-#' #   Model         : gpt-4o-mini
-#' #   API key       : sk-ab****
-#' #   Context lines : 40
-#' #   Ollama URL    : http://localhost:11434
-#' }
+#'
+#' # Capture the config as a list for programmatic use
+#' cfg <- llmcoder_config()
+#' cfg$provider
+#' cfg$model
 #'
 #' @seealso [llmcoder_setup()]
 #' @export
@@ -169,17 +169,21 @@ llmcoder_config <- function() {
     ollama_url    = getOption("llmcoder.ollama_url",    "http://localhost:11434"),
     custom_url    = getOption("llmcoder.custom_url",    "")
   )
+  class(cfg) <- "llmcoder_config"
+  cfg
+}
 
+#' @export
+print.llmcoder_config <- function(x, ...) {
   cat("llmcoder configuration:\n")
-  cat("  Provider      :", cfg$provider,      "\n")
-  cat("  Model         :", cfg$model,         "\n")
-  cat("  API key       :", cfg$api_key,       "\n")
-  cat("  Context lines :", cfg$context_lines, "\n")
-  cat("  Ollama URL    :", cfg$ollama_url,    "\n")
-  if (nchar(cfg$custom_url) > 0)
-    cat("  Custom URL    :", cfg$custom_url,   "\n")
-
-  invisible(cfg)
+  cat("  Provider      :", x$provider,      "\n")
+  cat("  Model         :", x$model,         "\n")
+  cat("  API key       :", x$api_key,       "\n")
+  cat("  Context lines :", x$context_lines, "\n")
+  cat("  Ollama URL    :", x$ollama_url,    "\n")
+  if (nchar(x$custom_url) > 0)
+    cat("  Custom URL    :", x$custom_url,   "\n")
+  invisible(x)
 }
 
 # Null-coalescing (also defined in gadgets.R — keep consistent)

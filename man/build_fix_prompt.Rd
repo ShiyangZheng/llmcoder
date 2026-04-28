@@ -6,7 +6,17 @@
 \usage{
 build_fix_prompt()
 }
+\value{
+Character string: the system prompt sent to the LLM for the
+fix workflow.
+}
 \description{
-System prompt for error fixing
+Returns the system prompt instructing the LLM to diagnose an R error and
+produce corrected code.
+}
+\examples{
+\dontrun{
+build_fix_prompt()
+}
 }
 \keyword{internal}

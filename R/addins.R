@@ -318,6 +318,20 @@ addin_settings <- function() settings_gadget()
 # ---------- Internal helpers --------------------------------------------------
 
 #' Strip markdown code fences from LLM output
+#'
+#' Strips common markdown code fences from LLM output so the raw code can be
+#' inserted into the editor.
+#'
+#' @param code Character string returned by an LLM, possibly wrapped in
+#'   ` ```r` code fences.
+#' @return Character string with fences removed.  If no fences are found, the
+#'   input is returned as-is.
+#' @examples
+#' \dontrun{
+#' raw <- "\n```r\nx <- mean(1:10)\nprint(x)\n```\n"
+#' clean_code_output(raw)
+#' clean_code_output("no fences here")
+#' }
 #' @keywords internal
 clean_code_output <- function(code) {
   code <- stringr::str_trim(code)

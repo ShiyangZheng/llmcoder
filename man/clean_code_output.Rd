@@ -6,7 +6,23 @@
 \usage{
 clean_code_output(code)
 }
+\arguments{
+\item{code}{Character string returned by an LLM, possibly wrapped in
+\verb{ ```r} code fences.}
+}
+\value{
+Character string with fences removed.  If no fences are found, the
+input is returned as-is.
+}
 \description{
-Strip markdown code fences from LLM output
+Strips common markdown code fences from LLM output so the raw code can be
+inserted into the editor.
+}
+\examples{
+\dontrun{
+raw <- "\n```r\nx <- mean(1:10)\nprint(x)\n```\n"
+clean_code_output(raw)
+clean_code_output("no fences here")
+}
 }
 \keyword{internal}

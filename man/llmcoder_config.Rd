@@ -7,23 +7,23 @@
 llmcoder_config()
 }
 \value{
-Invisible named list of the current settings (API key is masked for
-security).
+An object of class \code{"llmcoder_config"}: a named list with elements
+\code{provider}, \code{model}, \code{api_key}, \code{context_lines}, \code{ollama_url}, and
+\code{custom_url}.  The API key is masked for security.  When printed, it
+displays in a human-readable table.
 }
 \description{
-Prints the active provider, model, API key (masked), context-lines setting,
-and any provider-specific URLs to the console.
+Returns (and prints) the active provider, model, API key (masked),
+context-lines setting, and any provider-specific URLs.
 }
 \examples{
-\dontrun{
+# Show current configuration (reads from option values)
 llmcoder_config()
-# llmcoder configuration:
-#   Provider      : openai
-#   Model         : gpt-4o-mini
-#   API key       : sk-ab****
-#   Context lines : 40
-#   Ollama URL    : http://localhost:11434
-}
+
+# Capture the config as a list for programmatic use
+cfg <- llmcoder_config()
+cfg$provider
+cfg$model
 
 }
 \seealso{
