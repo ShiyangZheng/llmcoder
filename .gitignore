@@ -2,7 +2,6 @@
 *.tar.gz
 *.zip
 *.log
-.Rbuildignore
 
 # macOS
 .DS_Store
