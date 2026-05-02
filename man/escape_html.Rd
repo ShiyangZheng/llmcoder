@@ -7,7 +7,7 @@
 escape_html(s)
 }
 \arguments{
-\item{text}{Character string. Raw markdown text.}
+\item{s}{Character string. Raw markdown text.}
 }
 \value{
 Character string. Sanitised HTML fragment.

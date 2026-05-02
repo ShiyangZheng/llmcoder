@@ -7,3 +7,5 @@
 ^llmcoder\.Rcheck$
 ^llmcoder-manual\.tex$
 ^llmcoder_.*\.tar\.gz$
+^TEST_GUIDE\.md$
+^UI_FIXES_SUMMARY\.md$
