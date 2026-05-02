@@ -1,10 +1,16 @@
 # llmcoder
 
-> Write a comment. Get working R code. Chat with your session. Instantly.
+> Write a comment. Get working R code. Instantly.
 
 <!-- badges: start -->
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+![lifecycle](https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg) [![](https://www.r-pkg.org/badges/version/llmcoder)](https://cran.r-project.org/package=llmcoder) [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/llmcoder)](https://www.r-pkg.org/pkg/llmcoder) [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/llmcoder)](https://www.r-pkg.org/pkg/llmcoder) 
+
 <!-- badges: end -->
+
+---------
+
+[![Watch the demo](https://img.youtube.com/vi/zP-RuCN3q14/maxresdefault.jpg)](https://youtu.be/zP-RuCN3q14)
 
 **llmcoder** is an RStudio addin that integrates large language model (LLM)
 assistance directly into your coding workflow. Write a `#` comment, press a
@@ -168,29 +174,18 @@ Bind in **Tools → Modify Keyboard Shortcuts → search "llmcoder"**.
 |------------------------------|--------------------|---------------|
 | LLMcoder Chat Panel          | `Ctrl+Shift+L`     | `Cmd+Shift+L` |
 | Generate Code from Comment   | `Ctrl+Shift+G`     | `Cmd+Shift+G` |
-| Generate Code (with Preview) | `Ctrl+Shift+P`     | `Cmd+Shift+P` |
+| Generate Code (with Preview)  | `Ctrl+Shift+P`     | `Cmd+Shift+P` |
 | Fix Last Console Error       | `Ctrl+Shift+F`     | `Cmd+Shift+F` |
-| Explain Selected Code        | `Ctrl+Shift+E`     | `Cmd+Shift+E` |
+| Explain Selected Code         | `Ctrl+Shift+E`     | `Cmd+Shift+E` |
 
 ## Context awareness
 
-The Chat Panel provides the richest context — it automatically reads:
-- Loaded add-on packages
-- Global environment objects
-- Current source editor contents
-- Recent console command history
-
-For the code generation addins, **40 lines above your comment** are sent as context (configurable), so the model can infer variable names, match your code style, and avoid re-importing packages already loaded.
+The addin sends the **40 lines above your comment** as context (configurable),
+so the model can infer variable names, match your code style, and avoid
+re-importing packages already loaded.
 
 ```r
 llmcoder_setup("openai", api_key = "...", context_lines = 20L)
-```
-
-You can also manually inspect the session context:
-
-```r
-session_context_report()      # human-readable report
-session_context_prompt()       # ready-to-inject system prompt block
 ```
 
 ## Security
@@ -211,7 +206,7 @@ citation("llmcoder")
 ```
 
 > Zheng, S. (2026). *llmcoder: LLM-Powered Code Generation and Error Fixing
-> for RStudio* (Version 1.2.0). R package.
+> for RStudio*. R package version 1.2.0.
 > <https://github.com/ShiyangZheng/llmcoder>
 
 ## License
