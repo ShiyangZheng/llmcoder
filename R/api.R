@@ -56,6 +56,14 @@ call_llm <- function(prompt, system_prompt, context = NULL) {
   model      <- getOption("llmcoder.model",      default_model(provider))
   ollama_url <- getOption("llmcoder.ollama_url", "http://localhost:11434")
 
+  if (is.null(provider) || !nzchar(trimws(provider))) {
+    stop(
+      "llmcoder.provider option is not set. ",
+      "Run llmcoder_setup() or use the Settings addin to configure your provider.",
+      call. = FALSE
+    )
+  }
+
   # Local / keyless providers
   local_providers <- c("ollama")
   if (!provider %in% local_providers &&
@@ -165,7 +173,16 @@ call_openai_compat <- function(prompt, system_prompt, api_key, model,
     stop("API error (", httr2::resp_status(resp), "): ",
          body$error$message, call. = FALSE)
   }
-  body$choices[[1]]$message$content
+
+  content <- body$choices[[1]]$message$content
+  if (is.null(content) || !is.character(content) || length(content) == 0) {
+    stop(
+      "LLM returned empty content. ",
+      "The model may have returned a tool/function call instead of text.",
+      call. = FALSE
+    )
+  }
+  content
 }
 
 #' Anthropic Messages API call
@@ -352,4 +369,239 @@ build_fix_prompt <- function() {
     "6. If there are multiple plausible fixes, choose the most conservative one.\n",
     "The user's field is psycholinguistics / applied linguistics."
   )
+}
+
+
+# ============================================================
+#  llmcoder — Multi-turn message history API
+# ============================================================
+
+#' Call the configured LLM with full message history
+#'
+#' Like [call_llm()] but accepts a `messages` list that preserves the full
+#' conversation context across multiple turns.  This is the engine behind
+#' [addin_chat_panel()].
+#'
+#' @param messages List of messages, each element being
+#'   `list(role = "system"|"user"|"assistant", content = "...")`.
+#'   The **last** message must have `role = "user"`.
+#' @param system_prompt_override  Optional character string.  If supplied,
+#'   it **replaces** the system role message in `messages` entirely
+#'   (useful for swapping in a custom persona at call-time).
+#'
+#' @return Character string: the model's response text.
+#'
+#' @keywords internal
+call_llm_history <- function(messages, system_prompt_override = NULL) {
+
+  provider   <- getOption("llmcoder.provider",   "openai")
+  api_key    <- getOption("llmcoder.api_key",    Sys.getenv("LLMCODER_API_KEY"))
+  model      <- getOption("llmcoder.model",       default_model(provider))
+  ollama_url <- getOption("llmcoder.ollama_url", "http://localhost:11434")
+
+  # Guard against NULL / empty provider (R switch silently returns NULL for these)
+  if (is.null(provider) || !nzchar(trimws(provider))) {
+    stop(
+      "llmcoder.provider option is not set. ",
+      "Run llmcoder_setup() or use the Settings addin to configure your provider.",
+      call. = FALSE
+    )
+  }
+
+  local_providers <- c("ollama")
+  if (!provider %in% local_providers &&
+      (is.null(api_key) || nchar(api_key) == 0)) {
+    stop(
+      "No API key found. Run `llmcoder_setup()` or set the ",
+      "LLMCODER_API_KEY environment variable.", call. = FALSE
+    )
+  }
+
+  # Optionally replace system message
+  msgs <- messages
+  if (!is.null(system_prompt_override)) {
+    sys_idx <- which(vapply(msgs, `[[`, logical(1), "role") == "system")
+    if (length(sys_idx) > 0) {
+      msgs[[sys_idx[[1]]]] <- list(role = "system", content = system_prompt_override)
+    } else {
+      msgs <- c(list(list(role = "system", content = system_prompt_override)), msgs)
+    }
+  }
+
+  switch(provider,
+    openai = call_openai_compat_history(
+      msgs, api_key, model, base_url = "https://api.openai.com/v1"),
+
+    anthropic = call_anthropic_history(
+      msgs, api_key, model),
+
+    deepseek = call_openai_compat_history(
+      msgs, api_key, model, base_url = "https://api.deepseek.com/v1"),
+
+    ollama = call_ollama_history(
+      msgs, model, base_url = ollama_url),
+
+    groq = call_openai_compat_history(
+      msgs, api_key, model, base_url = "https://api.groq.com/openai/v1"),
+
+    together = call_openai_compat_history(
+      msgs, api_key, model, base_url = "https://api.together.xyz/v1"),
+
+    openrouter = call_openai_compat_history(
+      msgs, api_key, model,
+      base_url    = "https://openrouter.ai/api/v1",
+      extra_hdrs  = list(
+        "HTTP-Referer" = "https://github.com/ShiyangZheng/llmcoder",
+        "X-Title"      = "llmcoder"
+      )),
+
+    custom = {
+      custom_url <- getOption("llmcoder.custom_url", "")
+      if (nchar(trimws(custom_url)) == 0)
+        stop("Set the 'llmcoder.custom_url' option before using the 'custom' provider.",
+             call. = FALSE)
+      call_openai_compat_history(msgs, api_key, model, base_url = custom_url)
+    },
+
+    stop("Unknown provider: '", provider, "'. ",
+         "Valid choices: openai, anthropic, deepseek, ollama, ",
+         "groq, together, openrouter, custom.", call. = FALSE)
+  )
+}
+
+
+#' OpenAI-compatible multi-turn call
+#'
+#' @param messages   List of message objects.
+#' @param api_key    API key.
+#' @param model      Model name.
+#' @param base_url   API base URL.
+#' @param extra_hdrs Named character vector of extra headers.
+#' @keywords internal
+call_openai_compat_history <- function(messages, api_key, model,
+                                       base_url,
+                                       extra_hdrs = character()) {
+
+  hdrs <- c(
+    "Authorization" = paste("Bearer", api_key),
+    "Content-Type"  = "application/json",
+    unname(extra_hdrs)
+  )
+
+  body_data <- list(
+    model       = model,
+    messages    = messages,
+    temperature = 0.7,
+    max_tokens  = 2000
+  )
+
+  base <- httr2::request(
+    paste0(trimws(base_url, "right"), "/chat/completions")
+  )
+
+  req <- do.call(httr2::req_headers, c(list(.req = base), hdrs))
+  req <- httr2::req_body_json(req, data = body_data)
+  req <- httr2::req_error(req, is_error = \(r) FALSE)
+  req <- httr2::req_timeout(req, 120)
+
+  resp <- httr2::req_perform(req)
+  body <- httr2::resp_body_json(resp)
+
+  if (!is.null(body$error)) {
+    stop("API error (", httr2::resp_status(resp), "): ",
+         body$error$message, call. = FALSE)
+  }
+
+  content <- body$choices[[1]]$message$content
+
+  # Defensive: ensure we got a character string, not a function_call or NULL
+  if (is.null(content) || !is.character(content) || length(content) == 0) {
+    finish_reason <- body$choices[[1]]$finish_reason %||% "(unknown)"
+    stop(
+      "LLM returned empty content (finish_reason = '", finish_reason, "'). ",
+      "The model may have returned a tool/function call instead of text. ",
+      "Check that 'tools' or 'function_call' parameters are not set.",
+      call. = FALSE
+    )
+  }
+  content
+}
+
+
+#' Anthropic Messages API with multi-turn history
+#'
+#' Extracts the system role from `messages` and moves it to the top-level
+#' \code{system} field, as required by the Anthropic API.  Only
+#' \code{user} and \code{assistant} roles are allowed.
+#'
+#' @param messages  List of message objects.
+#' @param api_key   API key.
+#' @param model     Model name.
+#' @keywords internal
+call_anthropic_history <- function(messages, api_key, model) {
+
+  # Pull system out
+  sys_content <- ""
+  non_sys <- messages
+
+  sys_idx <- which(vapply(messages, `[[`, logical(1), "role") == "system")
+  if (length(sys_idx) > 0) {
+    sys_content <- messages[[sys_idx[[1]]]]$content
+    non_sys <- messages[-sys_idx[[1]]]
+  }
+
+  # Only user/assistant roles are permitted
+  allowed_roles <- c("user", "assistant")
+  anth_messages <- lapply(non_sys, function(m) {
+    if (!(m$role %in% allowed_roles)) {
+      list(role = "user", content = paste0("[", m$role, " message]: ", m$content))
+    } else {
+      m
+    }
+  })
+
+  req <- httr2::request("https://api.anthropic.com/v1/messages") |>
+    httr2::req_headers(
+      "x-api-key"          = api_key,
+      "anthropic-version"  = "2023-06-01",
+      "Content-Type"       = "application/json"
+    ) |>
+    httr2::req_body_json(data = list(
+      model      = model,
+      max_tokens = 2000,
+      system     = sys_content,
+      messages   = anth_messages
+    )) |>
+    httr2::req_error(is_error = \(r) FALSE) |>
+    httr2::req_timeout(120)
+
+  resp <- httr2::req_perform(req)
+  body <- httr2::resp_body_json(resp)
+
+  if (!is.null(body$error)) {
+    stop("Anthropic API error (", httr2::resp_status(resp), "): ",
+         body$error$message, call. = FALSE)
+  }
+  body$content[[1]]$text
+}
+
+
+#' Ollama multi-turn (OpenAI-compatible endpoint)
+#' @keywords internal
+call_ollama_history <- function(messages, model, base_url) {
+  call_openai_compat_history(
+    messages   = messages,
+    api_key    = "ollama",
+    model      = model,
+    base_url   = paste0(trimws(base_url, "right"), "/v1")
+  )
+}
+
+
+# ---------- Infix helpers ----------------------------------------------------
+
+#' Null-coalescing operator: returns x if it is non-NULL, otherwise y
+#' @keywords internal
+`%||%` <- function(x, y) {
+  if (is.null(x)) y else x
 }

@@ -23,6 +23,11 @@ Description: Select R code, trigger to insert a plain-English explanation as # c
 Binding: addin_explain_code
 Interactive: false
 
+Name: LLMcoder Chat Panel
+Description: Open an interactive multi-turn chat powered by your configured LLM directly inside RStudio. Features: multi-turn conversation history, session-context awareness (loaded packages, global objects, source editor, console history), one-click code execution from chat, prompt style presets (General / R Code Helper / Statistics / Research), transcript export. Recommended shortcut: Ctrl+Shift+L (Cmd+Shift+L on macOS).
+Binding: addin_chat_panel
+Interactive: true
+
 Name: LLMcoder Settings
 Description: Configure provider (OpenAI / Anthropic / DeepSeek / Groq / Together AI / OpenRouter / Ollama / Custom), model, API key, and context-window size. Settings can be persisted to ~/.Rprofile.
 Binding: addin_settings

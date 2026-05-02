@@ -2,3 +2,8 @@
 ^NEWS\.md$
 ^\.DS_Store$
 ^assets$
+^\.Rcheck$
+^\.\.Rcheck$
+^llmcoder\.Rcheck$
+^llmcoder-manual\.tex$
+^llmcoder_.*\.tar\.gz$

@@ -1,6 +1,8 @@
 Package: llmcoder
-Title: LLM-Powered Code Generation and Error Fixing for 'RStudio'
-Version: 1.0.0
+Title: LLM-Powered Code Generation, Error Fixing, and Chat for 'RStudio'
+Version: 1.2.0
+Maintainer: Shiyang Zheng <shiyang.zheng@nottingham.ac.uk>
+Author: Shiyang Zheng [aut, cre] (<https://orcid.org/0000-0003-0511-4683>)
 Authors@R:
     person(given  = "Shiyang",
            family = "Zheng",
@@ -8,15 +10,16 @@ Authors@R:
            role   = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0511-4683"))
 Description: An 'RStudio' addin that integrates large language model (LLM)
-    assistance directly into the code-editing workflow. Users can generate R
-    code from inline comments, obtain LLM-assisted fixes for console errors,
-    and insert plain-English explanations of selected code blocks - all
-    without leaving the editor. Supports 'OpenAI', 'Anthropic' (Claude),
-    'DeepSeek', 'Groq', 'Together AI', 'OpenRouter', 'Ollama' (fully local, no
-    API key required), and any 'OpenAI'-compatible custom endpoint (e.g. 'LM
-    Studio', 'vLLM', 'llama.cpp').
+    assistance directly into the code-editing workflow. Features include:
+    (1) generate R code from inline comments; (2) obtain LLM-assisted fixes for
+    console errors; (3) insert plain-English explanations of selected code
+    blocks; (4) a multi-turn Chat Panel with session-context awareness
+    (loaded packages, global objects, source editor contents, console history).
+    Supports 'OpenAI', 'Anthropic' (Claude), 'DeepSeek', 'Groq',
+    'Together AI', 'OpenRouter', 'Ollama' (fully local, no API key required),
+    and any 'OpenAI'-compatible custom endpoint (e.g. 'LM Studio', 'vLLM',
+    'llama.cpp').
 License: MIT + file LICENSE
-Date: 2026-04-25
 Depends: R (>= 4.1.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -28,9 +31,11 @@ Imports:
     httr2 (>= 1.0.0),
     miniUI (>= 0.1.1),
     shiny (>= 1.7.0),
+    stringi (>= 1.7.0),
     stringr (>= 1.5.0),
-    rlang (>= 1.0.0)
+    rlang (>= 1.0.0),
+    htmltools (>= 0.5.0),
+    jsonlite (>= 1.8.0)
 Suggests:
-    jsonlite (>= 1.8.0),
     testthat (>= 3.0.0),
     withr (>= 2.5.0)

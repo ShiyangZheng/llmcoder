@@ -1,18 +1,27 @@
 # llmcoder
 
-> Write a comment. Get working R code. Instantly.
+> Write a comment. Get working R code. Chat with your session. Instantly.
 
 <!-- badges: start -->
-[![CRAN status](https://www.r-pkg.org/badges/version/llmcoder)](https://CRAN.R-project.org/package=llmcoder)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
-
-[![Watch the demo](https://img.youtube.com/vi/zP-RuCN3q14/maxresdefault.jpg)](https://youtu.be/zP-RuCN3q14)
 
 **llmcoder** is an RStudio addin that integrates large language model (LLM)
 assistance directly into your coding workflow. Write a `#` comment, press a
 shortcut, and receive working R code below — no browser, no copy-pasting.
-It also auto-fixes console errors and explains selected code as inline comments.
+It also auto-fixes console errors, explains selected code as inline comments,
+and now includes a **multi-turn Chat Panel** with full session-context awareness.
+
+## What's New in 1.2.0
+
+| Feature | Description |
+|---------|-------------|
+| **Chat Panel** | Multi-turn conversational interface inside RStudio with session awareness |
+| **Session Context** | Chat automatically knows your loaded packages, global objects, source file, and history |
+| **One-Click Run** | Each R code block in chat has a **Run** button that sends code directly to the console |
+| **Prompt Styles** | Switch between General, R Code Helper, Statistics Advisor, Research (Psycho) personas |
+| **Transcript Export** | Save your chat as a `.txt` file for reproducibility |
+| **Context File Browser** | Select files from your workspace to include as context — no manual path entry |
 
 ## How to install llmcoder?
 
@@ -58,6 +67,39 @@ llmcoder_setup("custom", api_key = "lm-studio",
 Or configure via the GUI: **Addins → LLMcoder Settings**.
 
 ### Key features
+
+**LLMcoder Chat Panel** (`Ctrl+Shift+L`)
+
+Open a full conversational interface inside RStudio:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  LLMcoder Chat Panel                                    [Done] │
+├──────────────┬──────────────────────────────────────────────────┤
+│ LLMcoder     │                                                  │
+│              │  [empty]                                          │
+│ Context      │  Ask me anything about R, data analysis,         │
+│ [✓] Session  │  statistics, or your code.                       │
+│              │                                                  │
+│ Prompt Style │                                                  │
+│ [General  ▾] │                                                  │
+│              │  AI: Here's the mixed-effects model...            │
+│ [+ New Chat] │      ```r                                         │
+│ [Clear]      │      lmer(RT ~ condition + (1|ppt) +             │
+│ [Export]     │            (1|item), data = df)                  │
+│              │      ``` [Run]                                    │
+├──────────────┴──────────────────────────────────────────────────┤
+│ [Type a message... Ctrl+Enter to send]              [ ▶ Send] │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+Features:
+- Multi-turn conversation history (remembers everything you said)
+- **Session Context**: auto-injects your loaded packages, global objects, source editor contents, and recent console history into every message
+- **Run button** on every ` ```r ` code block — sends code to the R console in one click
+- Toggle session context on/off, switch persona styles
+- Export full transcript as a text file
+- **Context File Browser**: click "Add File to Context" in the sidebar to select any workspace file — file contents are automatically included in the LLM context
 
 **Generate code from a comment** (`Ctrl+Shift+G`)
 
@@ -124,19 +166,31 @@ Bind in **Tools → Modify Keyboard Shortcuts → search "llmcoder"**.
 
 | Addin                        | Windows / Linux   | macOS         |
 |------------------------------|--------------------|---------------|
+| LLMcoder Chat Panel          | `Ctrl+Shift+L`     | `Cmd+Shift+L` |
 | Generate Code from Comment   | `Ctrl+Shift+G`     | `Cmd+Shift+G` |
-| Generate Code (with Preview)  | `Ctrl+Shift+P`     | `Cmd+Shift+P` |
+| Generate Code (with Preview) | `Ctrl+Shift+P`     | `Cmd+Shift+P` |
 | Fix Last Console Error       | `Ctrl+Shift+F`     | `Cmd+Shift+F` |
-| Explain Selected Code         | `Ctrl+Shift+E`     | `Cmd+Shift+E` |
+| Explain Selected Code        | `Ctrl+Shift+E`     | `Cmd+Shift+E` |
 
 ## Context awareness
 
-The addin sends the **40 lines above your comment** as context (configurable),
-so the model can infer variable names, match your code style, and avoid
-re-importing packages already loaded.
+The Chat Panel provides the richest context — it automatically reads:
+- Loaded add-on packages
+- Global environment objects
+- Current source editor contents
+- Recent console command history
+
+For the code generation addins, **40 lines above your comment** are sent as context (configurable), so the model can infer variable names, match your code style, and avoid re-importing packages already loaded.
 
 ```r
 llmcoder_setup("openai", api_key = "...", context_lines = 20L)
+```
+
+You can also manually inspect the session context:
+
+```r
+session_context_report()      # human-readable report
+session_context_prompt()       # ready-to-inject system prompt block
 ```
 
 ## Security
@@ -157,7 +211,7 @@ citation("llmcoder")
 ```
 
 > Zheng, S. (2026). *llmcoder: LLM-Powered Code Generation and Error Fixing
-> for RStudio*. R package version 1.0.0.
+> for RStudio* (Version 1.2.0). R package.
 > <https://github.com/ShiyangZheng/llmcoder>
 
 ## License
