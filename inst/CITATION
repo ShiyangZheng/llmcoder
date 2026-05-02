@@ -4,10 +4,10 @@ bibentry(
   author   = person("Shiyang", "Zheng"),
   year     = "2026",
   url      = "https://github.com/ShiyangZheng/llmcoder",
-  note     = "R package version 1.0.0",
+  note     = "R package version 1.2.0",
   textVersion = paste(
     "Zheng, S. (2026). llmcoder: LLM-Powered Code Generation",
-    "and Error Fixing for RStudio. R package version 1.0.0.",
+    "and Error Fixing for RStudio. R package version 1.2.0.",
     "https://github.com/ShiyangZheng/llmcoder"
   )
 )
