@@ -20,7 +20,7 @@ and now includes a **multi-turn Chat Panel** with full session-context awareness
 
 ## What's New in 1.2.0
 
-[![Watch the demo](https://img.youtube.com/vi/Uin7pr7ORlM/maxresdefault.jpg)](https://youtu.be/Uin7pr7ORlM)
+<img src="assets/llmcoder_chat_panel.png" width="800" alt="LLMCoder Chat Panel">
 
 
 | Feature | Description |
