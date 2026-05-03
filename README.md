@@ -20,6 +20,9 @@ and now includes a **multi-turn Chat Panel** with full session-context awareness
 
 ## What's New in 1.2.0
 
+[![Watch the demo](https://img.youtube.com/vi/Uin7pr7ORlM/maxresdefault.jpg)](https://youtu.be/Uin7pr7ORlM)
+
+
 | Feature | Description |
 |---------|-------------|
 | **Chat Panel** | Multi-turn conversational interface inside RStudio with session awareness |
