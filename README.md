@@ -18,10 +18,10 @@ shortcut, and receive working R code below — no browser, no copy-pasting.
 It also auto-fixes console errors, explains selected code as inline comments,
 and now includes a **multi-turn Chat Panel** with full session-context awareness.
 
+
 ## What's New in 1.2.0
 
-<img src="assets/llmcoder_chat_panel.png" width="800" alt="LLMCoder Chat Panel">
-
+[![Watch the demo](https://img.youtube.com/vi/SRzjaURbKCw/maxresdefault.jpg)](https://youtu.be/SRzjaURbKCw)
 
 | Feature | Description |
 |---------|-------------|
