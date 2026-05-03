@@ -913,6 +913,8 @@ render_markdown_html <- function(text) {
   code_lang <- ""
   code_lines <- character(0)
   output_parts <- character(0)
+  pre_placeholders <- character(0)   # named character vector: placeholder token -> HTML string
+  pre_counter <- 0L
 
   for (i in seq_along(lines)) {
     line <- lines[i]
@@ -949,8 +951,12 @@ render_markdown_html <- function(text) {
         pre_block <- paste0("<pre><div class='code-header'><span class='code-lang'>",
                             label, "</span>", buttons,
                             "</div><code>", escaped, "</code></pre>")
-        # Surround with blank lines so the paragraph splitter keeps <pre> isolated
-        output_parts <- c(output_parts, "", pre_block, "")
+        # Use placeholder to protect <pre> block from markdown processing;
+        # surround with "" so that \n\n+ split isolates the token
+        pre_counter <- pre_counter + 1L
+        placeholder <- paste0("__PRE_", pre_counter, "__")
+        pre_placeholders[placeholder] <- pre_block
+        output_parts <- c(output_parts, "", placeholder, "")
         next
       }
     }
@@ -972,8 +978,8 @@ render_markdown_html <- function(text) {
 
   render_block <- function(block) {
 
-    if (grepl("^<pre>", block)) {
-      return(block)
+    if (grepl("^__PRE_\\d+__$", block)) {
+      return(block)   # placeholder: will be restored after markdown processing
     }
 
     if (grepl("^### ", block, perl = TRUE)) {
@@ -1048,6 +1054,13 @@ render_markdown_html <- function(text) {
   }
 
   rendered <- paste(sapply(blocks, render_block), collapse = "\n")
+
+  # Restore <pre> placeholders with actual HTML
+  if (length(pre_placeholders) > 0) {
+    for (ph in names(pre_placeholders)) {
+      rendered <- gsub(ph, pre_placeholders[ph], rendered, fixed = TRUE)
+    }
+  }
 
   htmltools::HTML(rendered)
 }
