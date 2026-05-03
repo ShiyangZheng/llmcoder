@@ -212,68 +212,135 @@ chat_css <- function() {
 
   /* Code blocks inside messages */
   .msg-body pre {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 6px;
-    padding: 10px 12px;
-    overflow-x: auto;
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    padding: 0;
+    overflow: hidden;
     font-size: 13px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
     margin: 8px 0;
     position: relative;
+    line-height: 1.5;
   }
 
-  .msg.user pre { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.3); }
+  .msg.user pre {
+    background: rgba(0,0,0,.18);
+    border-color: rgba(255,255,255,.2);
+  }
 
+  /* code-header: dark bar like GitHub / VS Code */
   .code-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 4px 0 6px;
-    border-bottom: 1px solid #dee2e6;
-    margin-bottom: 6px;
+    padding: 6px 12px;
+    background: #eaeef2;
+    border-bottom: 1px solid #e1e4e8;
+    border-radius: 8px 8px 0 0;
+    gap: 6px;
   }
 
-  .msg.user .code-header { border-color: rgba(255,255,255,.25); }
+  .msg.user .code-header {
+    background: rgba(0,0,0,.25);
+    border-color: rgba(255,255,255,.15);
+  }
 
   .code-lang {
     font-size: 11px;
     font-weight: 600;
-    color: #868e96;
+    color: #57606a;
     text-transform: uppercase;
+    letter-spacing: .4px;
+    flex: 1;
+  }
+
+  .msg.user .code-lang { color: rgba(255,255,255,.7); }
+
+  /* Button group sitting together on the right */
+  .code-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .btn-run-code,
+  .btn-insert-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background .12s, border-color .12s, color .12s;
+    line-height: 1.4;
+    white-space: nowrap;
   }
 
   .btn-run-code {
-    font-size: 12px;
-    padding: 3px 10px;
-    background: #228be6;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background .15s;
-    margin-left: 4px;
+    background: transparent;
+    color: #1a73e8;
+    border-color: #c8d8f8;
   }
-
-  .btn-run-code:hover { background: #1971c2; }
+  .btn-run-code:hover {
+    background: #1a73e8;
+    color: white;
+    border-color: #1a73e8;
+  }
 
   .btn-insert-code {
-    font-size: 12px;
-    padding: 3px 10px;
-    background: #37b24d;
+    background: transparent;
+    color: #1e8a3e;
+    border-color: #b8e6c8;
+  }
+  .btn-insert-code:hover {
+    background: #1e8a3e;
     color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background .15s;
-    margin-left: 4px;
+    border-color: #1e8a3e;
   }
 
-  .btn-insert-code:hover { background: #2f9e44; }
+  /* Dark bg for user bubble code header buttons */
+  .msg.user .btn-run-code,
+  .msg.user .btn-insert-code {
+    color: rgba(255,255,255,.85);
+    border-color: rgba(255,255,255,.3);
+  }
+  .msg.user .btn-run-code:hover,
+  .msg.user .btn-insert-code:hover {
+    background: rgba(255,255,255,.25);
+    border-color: rgba(255,255,255,.5);
+  }
+
+  /* The actual code body */
+  .msg-body pre code {
+    display: block;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 13px;
+    font-family: inherit;
+    line-height: 1.55;
+    color: #24292f;
+    background: none;
+    border: none;
+  }
+
+  .msg.user pre code { color: rgba(255,255,255,.92); }
 
   .msg-body code {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 13px;
+    font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+    font-size: 12.5px;
+    background: #f0f2f4;
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: #c7254e;
+  }
+
+  .msg.user .msg-body code {
+    background: rgba(0,0,0,.2);
+    color: rgba(255,255,255,.9);
   }
 
   .msg-body p { margin: 0 0 8px; }
@@ -869,11 +936,12 @@ render_markdown_html <- function(text) {
         label <- if (code_lang == "r" || code_lang == "R") "R" else toupper(code_lang)
 
         if (code_lang == "r" || code_lang == "R") {
-          run_btn <- paste0("<button class='btn-run-code' data-code='",
-                           URLencode(inner, reserved = TRUE), "'>Run</button>")
-          insert_btn <- paste0("<button class='btn-insert-code' data-code='",
-                               URLencode(inner, reserved = TRUE), "'>Insert</button>")
-          buttons <- paste0(run_btn, " ", insert_btn)
+          enc <- URLencode(inner, reserved = TRUE)
+          run_icon <- "<svg width='11' height='11' viewBox='0 0 16 16' fill='currentColor' style='flex-shrink:0'><path d='M3 2.5a.5.5 0 0 1 .765-.424l10 5.5a.5.5 0 0 1 0 .848l-10 5.5A.5.5 0 0 1 3 13.5v-11z'/></svg>"
+          insert_icon <- "<svg width='11' height='11' viewBox='0 0 16 16' fill='currentColor' style='flex-shrink:0'><path d='M8 1a.5.5 0 0 1 .5.5V11h2.793l-2.147-2.146a.5.5 0 0 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L11.293 12H8.5v2.5a.5.5 0 0 1-1 0V12H4.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708.708L4.207 12H7.5V1.5A.5.5 0 0 1 8 1z'/></svg>"
+          run_btn    <- paste0("<button class='btn-run-code' data-code='", enc, "'>", run_icon, " Run</button>")
+          insert_btn <- paste0("<button class='btn-insert-code' data-code='", enc, "'>", insert_icon, " Insert</button>")
+          buttons <- paste0("<div class='code-btn-group'>", run_btn, insert_btn, "</div>")
         } else {
           buttons <- ""
         }
@@ -881,7 +949,8 @@ render_markdown_html <- function(text) {
         pre_block <- paste0("<pre><div class='code-header'><span class='code-lang'>",
                             label, "</span>", buttons,
                             "</div><code>", escaped, "</code></pre>")
-        output_parts <- c(output_parts, pre_block)
+        # Surround with blank lines so the paragraph splitter keeps <pre> isolated
+        output_parts <- c(output_parts, "", pre_block, "")
         next
       }
     }
