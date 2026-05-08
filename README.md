@@ -4,7 +4,14 @@
 
 <!-- badges: start -->
 
-![lifecycle](https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg) [![](https://www.r-pkg.org/badges/version/llmcoder)](https://cran.r-project.org/package=llmcoder) [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/llmcoder)](https://www.r-pkg.org/pkg/llmcoder) [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/llmcoder)](https://www.r-pkg.org/pkg/llmcoder) 
+![lifecycle](https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg) 
+[![](https://www.r-pkg.org/badges/version/llmcoder)](https://cran.r-project.org/package=llmcoder) 
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/last-day/llmcoder)](https://www.r-pkg.org/pkg/llmcoder)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/last-week/llmcoder)](https://www.r-pkg.org/pkg/llmcoder)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/llmcoder)](https://www.r-pkg.org/pkg/llmcoder) 
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/llmcoder)](https://www.r-pkg.org/pkg/llmcoder) 
+
+
 
 <!-- badges: end -->
 
